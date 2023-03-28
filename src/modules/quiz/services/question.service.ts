@@ -1,12 +1,11 @@
-import { CreateQuestionDto } from '../dto';
 import {
   DATA_SOURCE,
   QUESTION_REPOSITORY,
 } from '../../../constants/repositories';
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { DataSource, Repository } from 'typeorm';
-import { Question } from '../entities/question.entity';
-import { Quiz } from '../entities/quiz.entity';
+import { Question, Quiz } from '../entities';
+import { CreateQuestionDto } from '../dto';
 
 @Injectable()
 export class QuestionService {
@@ -43,6 +42,25 @@ export class QuestionService {
       throw error;
     } finally {
       await queryRunner.release();
+    }
+  }
+
+  async findQuestionById(questionId: number): Promise<Question> {
+    try {
+      const question = await this.questionRepository.findOne({
+        where: {
+          id: questionId,
+        },
+        relations: ['quiz', 'options'],
+      });
+
+      if (!question) {
+        throw new NotFoundException('Question not found!');
+      }
+
+      return question;
+    } catch (error) {
+      throw error;
     }
   }
 }

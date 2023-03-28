@@ -1,20 +1,23 @@
-import { QuestionController } from './controllers/question.controller';
 import { DatabaseModule } from './../database/database.module';
 import { Module } from '@nestjs/common';
-import { QuizController } from './controllers/quiz.controller';
-import { QuizService } from './services/quiz.service';
-import { quizProviders } from './providers/quiz.providers';
-import { QuestionService } from './services/question.service';
-import { questionProviders } from './providers/question.providers';
+import { OptionService, QuestionService, QuizService } from './services';
+import {
+  OptionController,
+  QuestionController,
+  QuizController,
+} from './controllers';
+import { optionProviders, questionProviders, quizProviders } from './providers';
 
 @Module({
   imports: [DatabaseModule],
-  controllers: [QuizController, QuestionController],
+  controllers: [QuizController, QuestionController, OptionController],
   providers: [
     ...quizProviders,
     ...questionProviders,
+    ...optionProviders,
     QuizService,
     QuestionService,
+    OptionService,
   ],
 })
 export class QuizModule {}

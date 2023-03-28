@@ -1,8 +1,7 @@
-import { Question } from '../quiz/entities/question.entity';
-import { Quiz } from 'src/modules/quiz/entities/quiz.entity';
 import { DATA_SOURCE } from './../../constants/repositories';
 import { DataSource } from 'typeorm';
 import { join } from 'path';
+import { Option, Question, Quiz } from '../quiz/entities';
 
 export const databaseProviders = [
   {
@@ -15,7 +14,7 @@ export const databaseProviders = [
         username: 'root',
         password: 'Joker-345',
         database: 'quiz',
-        entities: [Quiz, Question],
+        entities: [Quiz, Question, Option],
         synchronize: true,
       });
 

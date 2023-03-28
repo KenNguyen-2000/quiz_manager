@@ -1,4 +1,3 @@
-import { Question } from '../entities/question.entity';
 import { CreateQuestionDto } from '../dto';
 import {
   Body,
@@ -8,10 +7,11 @@ import {
   Post,
   UsePipes,
   ValidationPipe,
+  Get,
 } from '@nestjs/common';
-import { QuestionService } from '../services/question.service';
-import { QuizService } from '../services/quiz.service';
 import { Param } from '@nestjs/common/decorators';
+import { QuestionService, QuizService } from '../services';
+import { Question } from '../entities';
 
 @Controller('question')
 export class QuestionController {
@@ -20,14 +20,17 @@ export class QuestionController {
     private readonly quizService: QuizService,
   ) {}
 
-  @Post(':quizId')
-  @UsePipes(ValidationPipe)
-  async saveQuestion(
-    @Body() question: CreateQuestionDto,
-    @Param('quizId', ParseIntPipe) quizId: number,
+  @Get('/:questionId')
+  async getQuestionById(
+    @Param('questionId', ParseIntPipe) questionId: number,
   ): Promise<Question> {
-    console.log('Quiz Id', quizId);
-    const quiz = await this.quizService.getQuizById(quizId);
+    return await this.questionService.findQuestionById(questionId);
+  }
+
+  @Post('')
+  @UsePipes(ValidationPipe)
+  async saveQuestion(@Body() question: CreateQuestionDto): Promise<Question> {
+    const quiz = await this.quizService.getQuizById(question.quizId);
     if (!quiz) {
       throw new NotFoundException('Quiz Not found');
     }

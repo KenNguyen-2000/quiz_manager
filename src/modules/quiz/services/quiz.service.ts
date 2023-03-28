@@ -1,8 +1,8 @@
 import { QUIZ_REPOSITORY } from '../../../constants/repositories';
-import { CreateQuizDto } from '../dto/CreateQuiz.dto';
 import { Inject, Injectable } from '@nestjs/common';
-import { FindOneOptions, Repository } from 'typeorm';
-import { Quiz } from '../entities/quiz.entity';
+import { Repository } from 'typeorm';
+import { Quiz } from '../entities';
+import { CreateQuizDto } from '../dto';
 
 @Injectable()
 export class QuizService {
